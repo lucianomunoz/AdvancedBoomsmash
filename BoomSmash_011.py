@@ -1,7 +1,7 @@
 bl_info = {
     'name': 'Advanced Boomsmash',
     'author': 'Luciano Muñoz & Cristian Hasbun',
-    'version': (0, 10),
+    'version': (0, 11),
     'blender': (2, 7, 1),
     'location': 'View3D > Tools > Animation > Boomsmash',
     'description': 'Have quick access for opengl previews without the need to change your render settings',
