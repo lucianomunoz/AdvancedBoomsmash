@@ -58,5 +58,3 @@ A default name that will take the name of the scene and be set to create it's BS
 <a href="https://github.com/lucianomunoz/AdvancedBoomsmash" rel="nofollow">DOWNLOAD IT FROM HERE</a>
 
 Hope you guys can make it your own, implement it in your workflow and if someone is willing to add more to it fix, or help implement what's missing it'd be supercool. =)
-
-I replaced the dropbox link for a GitHub one if anyone wants to branch or edit it you're very welcome!
