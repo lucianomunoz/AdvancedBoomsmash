@@ -1,4 +1,4 @@
-# AdvancedBoomsmash
+# Advanced-Boomsmash
 
 First, a "boomsmash" is an OpenGL render that grabs images from the view-port and spits them as fast as it can to the hard drive, to the people that comes from Maya this is known as playblast.
 
