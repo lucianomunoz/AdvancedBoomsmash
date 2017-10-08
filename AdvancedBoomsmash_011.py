@@ -26,8 +26,12 @@ class BoomProps(bpy.types.PropertyGroup):
         description = 'Same boomsmash settings for all scenes in file.',
         default = False)
 
-    #twm.image_settings = bpy.types.ImageFormatSettings(
-    #                        bpy.context.scene.render.image_settings)
+    format = bpy.props.EnumProperty(
+        items=[
+            ('None', 'None',''),
+            ('FFMPEG_MP4', 'MP4', ''),
+            ('FFMPEG_MOV', 'MOV', '')],
+        default='None')
 
     scene_cam = BoolProperty(
         name = 'Active Camera',
@@ -143,7 +147,8 @@ class DoBoom(bpy.types.Operator):
         old_simplify = rd.use_simplify 
         old_filepath = rd.filepath
         old_alpha_mode = rd.alpha_mode
-        #old_image_settings = rd.image_settings
+        old_image_settings_file_format = rd.image_settings.file_format
+        old_image_settings_color_mode = rd.image_settings.color_mode
         old_resolution_percentage = rd.resolution_percentage
         old_frame_step = cs.frame_step
 
@@ -155,7 +160,14 @@ class DoBoom(bpy.types.Operator):
         rd.filepath = cs.boom_props.dirname + cs.boom_props.filename
         rd.alpha_mode = 'TRANSPARENT' if boom_props.transparent else 'SKY'
 
-        #rd.image_settings = boom_props.image_settings
+        if boom_props.format != 'None':
+            image_settings = {
+                'FFMPEG_MP4': {'file_format': 'FFMPEG', 'ffmpeg':{'format': 'MPEG4', 'codec': 'H264'}},
+                'FFMPEG_MOV': {'file_format': 'FFMPEG', 'ffmpeg':{'format': 'QUICKTIME', 'codec': 'H264'}}}
+
+            rd.image_settings.file_format = image_settings[boom_props.format]['file_format']
+            rd.ffmpeg.format = image_settings[boom_props.format]['ffmpeg']['format']
+            rd.ffmpeg.codec = image_settings[boom_props.format]['ffmpeg']['codec']
         rd.resolution_percentage = boom_props.resolution_percentage
         cs.frame_step = boom_props.frame_skip + 1
         view_pers = context.area.spaces[0].region_3d.view_perspective
@@ -174,7 +186,9 @@ class DoBoom(bpy.types.Operator):
         rd.use_simplify = old_simplify
         rd.filepath = old_filepath
         rd.alpha_mode = old_alpha_mode
-        #rd.image_settings = old_image_settings
+        if boom_props.format != 'None':
+            rd.image_settings.file_format = old_image_settings_file_format
+            rd.image_settings.color_mode = old_image_settings_color_mode
         rd.resolution_percentage = old_resolution_percentage
         context.scene.frame_step = old_frame_step
         if boom_props.scene_cam and view_pers is not 'CAMERA':
@@ -225,9 +239,10 @@ def draw_boomsmash_panel(context, layout):
     col.prop(boom_props, 'resolution_percentage', slider = True )
     
     col.separator()
-    
-    #col.label(text = 'Output Format:')
-    #col.template_image_settings(wm.image_settings, color_management = False)
+    col.label(text = 'Output Format:')
+    row = col.row()
+    row.prop(boom_props, 'format')
+    col.separator()
 
     col.label(text = 'boomsmash folder:')
     row = col.row()
